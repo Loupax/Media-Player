@@ -10,7 +10,10 @@ app.controller('PlayerController', ['$scope', function($scope){
 
 	$scope.$on('file_clicked', function(event, file){
 		var reader = new FileReader();
-		reader.onloadend = function(){
+		
+    // This is no optimal for large files... 
+    // Do some homework on splitting files
+    reader.onloadend = function(){
 			var extension = file.name.split('.').pop();
 			if(audFormats.indexOf(extension) > -1)
 			{
