@@ -1,0 +1,15 @@
+{
+  "name": "Media player",
+  "description": "Media player",
+  "version": "1",
+  "manifest_version": 2,
+  "app": {
+    "background": {
+      "scripts": ["main.js"]
+    }
+  },
+  "permissions" : [
+    "fileSystem",
+    {"mediaGalleries": ["read", "allAutoDetected"] }
+  ]
+}

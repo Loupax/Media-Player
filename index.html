@@ -1,0 +1,31 @@
+ <!doctyle html>
+ <html ng-app="app" ng-csp>
+	 <head>
+	 	<link rel="stylesheet" type="text/css" href="style.css">
+	 	<script src="/libs/angular.min.js"></script>	 	
+	 	<script src="app.js"></script>
+	 </head> 
+
+	 <body>
+			<div ng-app id="player">
+				<aside ng-controller="FileListController">
+					<ul>
+						<!-- List the libraries -->
+						<li ng-repeat="node in tree">
+							{{node.name}}
+							<!-- Files inside the current media library -->
+							<ul>
+								<li ng-repeat="file in node.nodes" ng-click="loadAndPlay(file)">
+									{{file.name}}
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</aside>
+				<section ng-controller="PlayerController">
+		      		<audio controls src="{{currentAudio}}"></audio>
+		      		<video controls src="{{currentVideo}}"
+				</section>
+			</div>
+	 </body>
+  </html>

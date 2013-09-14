@@ -1,0 +1,18 @@
+#player{
+	display: flex;
+	height: 100%;
+	background: #ddd;	
+}
+  
+#player aside{
+    background: #ddd;
+    flex: 1;
+}
+#player section{
+    background: #111;
+    flex: 3;
+}
+
+audio{
+	height: 100%;
+}
