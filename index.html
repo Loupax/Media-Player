@@ -11,15 +11,26 @@
 		 		<aside ng-controller="FileListController">
 					<ul>
 						<!-- List the libraries -->
-						<li ng-click="loadAndPlay(node)" ng-repeat="node in tree">
+						<li 
+							ng-click="loadAndPlay(node)" 
+							ng-repeat="node in tree"
+							ng-class="{active: isCurrentlyPlayingFile(node)}">
 							{{node.name}}
 						</li>
 					</ul>
+					<div>
+						<label for="repeat">Repeat</label>
+						<input id="repeat" type="checkbox" ng-model="repeat">
+
+						<label for="autoplay">Autoplay</label>
+						<input id="autoplay" type="checkbox" ng-model="autoplay">
+					</div>
 				</aside>
 
 				<section ng-controller="PlayerController">
 		      		<audio ng-show="currentAudio" controls src="{{currentAudio}}"></audio>
 		      		<video ng-show="currentVideo" controls src="{{currentVideo}}"></video>
+		      		<img ng-show="currentImage" src="{{currentImage}}">
 				</section>
 			</div>
 	 </body>

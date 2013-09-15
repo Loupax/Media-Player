@@ -7,11 +7,25 @@
 #player aside{
     background: #ddd;
     flex: 1;
-    overflow: auto;
+    overflow-x: hidden; 
+    overflow-y: auto;
 }
 #player aside ul{
-
+	list-style-type: none;
+	padding: 0;
+	
 }
+#player aside ul li{
+	display: block;
+	padding: 0.2em 1em;
+	cursor: pointer;
+}
+
+#player aside ul li.active{
+	background: blue;
+	color: white;
+}
+
 #player section{
 	display: flex;
     background: #111;
