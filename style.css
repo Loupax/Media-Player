@@ -7,12 +7,24 @@
 #player aside{
     background: #ddd;
     flex: 1;
+    overflow: auto;
+}
+#player aside ul{
+
 }
 #player section{
+	display: flex;
     background: #111;
     flex: 3;
 }
 
+video{
+	width: 100%;
+	height: auto;
+	margin: auto;
+}
+
 audio{
-	height: 100%;
+	width: 100%;
+	height: 100%;	
 }

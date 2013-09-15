@@ -7,24 +7,19 @@
 	 </head> 
 
 	 <body>
-			<div ng-app id="player">
-				<aside ng-controller="FileListController">
+	 	<div ng-app id="player">
+		 		<aside ng-controller="FileListController">
 					<ul>
 						<!-- List the libraries -->
-						<li ng-repeat="node in tree">
+						<li ng-click="loadAndPlay(node)" ng-repeat="node in tree">
 							{{node.name}}
-							<!-- Files inside the current media library -->
-							<ul>
-								<li ng-repeat="file in node.nodes" ng-click="loadAndPlay(file)">
-									{{file.name}}
-								</li>
-							</ul>
 						</li>
 					</ul>
 				</aside>
+
 				<section ng-controller="PlayerController">
-		      		<audio controls src="{{currentAudio}}"></audio>
-		      		<video controls src="{{currentVideo}}"
+		      		<audio ng-show="currentAudio" controls src="{{currentAudio}}"></audio>
+		      		<video ng-show="currentVideo" controls src="{{currentVideo}}"></video>
 				</section>
 			</div>
 	 </body>

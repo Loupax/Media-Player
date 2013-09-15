@@ -8,29 +8,33 @@ app.controller('PlayerController', ['$scope', function($scope){
 	$scope.currentAudio = null;
 	$scope.currentVideo = null;
 
-	$scope.$on('file_clicked', function(event, file){
-		var reader = new FileReader();
-		
-    // This is no optimal for large files... 
-    // Do some homework on splitting files
-    reader.onloadend = function(){
-			var extension = file.name.split('.').pop();
-			if(audFormats.indexOf(extension) > -1)
-			{
-				$scope.currentAudio = this.result;	
-			}
+	$scope.$on('file_clicked', function(event, fileEntry){
+		var reader = new FileReader(),
+        url;
 
-			/*if(vidFormats.indexOf(extension) > -1)
-			{
-				$scope.currentVideo = this.result;
-			}*/
-
-			
-			$scope.$apply();
-		};
+    reader = window.URL || window.webKitURL;
 		
-		file.file(function(fff){
-			reader.readAsDataURL(fff);
+    
+		fileEntry.file(function(file){
+			//reader.readAsDataURL(file);
+      var extension = file.name.split('.').pop();
+
+      url = URL.createObjectURL(file);
+      
+      if(vidFormats.indexOf(extension) > -1)
+      {
+        $scope.currentVideo = url;  
+        $scope.currentAudio = '';
+      }
+      else if(audFormats.indexOf(extension) > -1)
+      {
+        $scope.currentAudio = url;
+        $scope.currentVideo = '';
+      }
+      
+      delete url;
+
+      $scope.$apply();
 		});
 		
 		
@@ -47,43 +51,43 @@ app.controller('FileListController', ['$scope', function($scope) {
   	$scope.$root.$broadcast('file_clicked', file);  	
   };
 
+  var getFileTree = function(entries){
+    var entry,
+        galleryReader,
+        node;
+
+
+    for(var i = 0; i < entries.length; i++)
+    {
+      entry = entries[i];
+      if(entry.constructor.name === 'FileEntry')
+      {
+        $scope.tree.push(entry);
+      }
+      else if(entry.constructor.name === 'DirectoryEntry')
+      {
+
+        galleryReader = entry.createReader();
+        galleryReader.readEntries(function(entries){
+          getFileTree(entries);
+          $scope.$apply();
+        });
+      }
+    }
+  };
 
   // if the app was restarted, get the media gallery information
-  chrome.mediaGalleries.getMediaFileSystems({
+chrome.mediaGalleries.getMediaFileSystems({
      interactive : 'if_needed'
   }, function(galleries){
   	galleries.forEach(function(item, index, array){
-  		var meta_data = chrome.mediaGalleries.getMediaFileSystemMetadata(item);
-  		var library = {
-  			name: meta_data.name,
-  			nodes: []
-  		};
-
   		galleryReader = item.root.createReader();
    		galleryReader.readEntries(function(entries){
-   			var entry;
    			var extension;
-   			for(var i in entries)
-   			{
-   				entry = entries[i];
-   				if(entry.constructor.name === 'FileEntry')
-   				{
-   					extension = entry.name.split('.').pop();
-   					if(validFormats.indexOf(extension) > -1)
-   					{
-   						library.nodes.push(entry);	
-   					}   					
-   				}
-   			}
+        var library = {};
 
-   			if(library.nodes.length > 0)
-   			{
-   				$scope.tree.push(library);	
-   			}   
-   			delete this.library;			
-   			  		
-   			$scope.$apply();   			
-   		});
+        getFileTree(entries);        
+   		});      
   	});
   });
 }]);
