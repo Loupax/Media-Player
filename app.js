@@ -1,23 +1,31 @@
 var app = angular.module('app', []);
 
-var audFormats = ['wav', 'mp3'];
+// Supported audio formats
+var audFormats = ['wav', 'mp3', 'ogg'];
+// Supported video formats
 var vidFormats = ['3gp', '3gpp', 'avi', 'flv', 'mov', 'mpeg', 'mpeg4', 'mp4', 'webm', 'wmv'];
+// All the valid formats in a single array to simplify checks in the future
 var validFormats = audFormats.concat(vidFormats);
 
+// The controller if the Player pane. Contains the audio and video player tags
 app.controller('PlayerController', ['$scope', function($scope, $element){
+	// Strings that will contain media URLs when files are selected
 	$scope.currentAudio = null;
 	$scope.currentVideo = null;
 
   var video = document.querySelector('video');
   var audio = document.querySelector('audio');
 
+  // Event listener that requests the next file
   var playNext = function(e){
     $scope.$root.$broadcast('request_next_file');
   }; 
 
+  // When the media playback is completed, request the next item
   video.addEventListener('ended', playNext);
   audio.addEventListener('ended', playNext);
 
+// When the user clicks on a file from the file explorer, read it
 	$scope.$on('file_clicked', function(event, fileEntry){
 		var reader = new FileReader(),
         url;
