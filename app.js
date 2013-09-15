@@ -67,6 +67,7 @@ app.controller('FileListController', ['$scope', function($scope) {
     var video = document.querySelector('video');
     var audio = document.querySelector('audio');
     audio.autoplay = new_value;
+    video.autoplay = new_value;
   });
 
   $scope.$on('request_next_file', function(){
