@@ -1,3 +1,7 @@
+ul{
+	padding: 0;
+	margin: 0;
+}
 #player{
 	display: flex;
 	height: 100%;
@@ -5,25 +9,37 @@
 }
   
 #player aside{
-    background: #ddd;
+    background: #FAF9F9;
     flex: 1;
-    overflow-x: hidden; 
-    overflow-y: auto;
 }
-#player aside ul{
+#player aside #fileList{
+	overflow-x: hidden; 
+    overflow-y: auto;
+	text-overflow: ellipsis
+
+	background: #FAF9F9;
 	list-style-type: none;
-	padding: 0;
+	padding: 0;	
+	height: -webkit-calc(100% - 4em);
+}
+
+#player aside #options{
 	
 }
+
 #player aside ul li{
 	display: block;
 	padding: 0.2em 1em;
 	cursor: pointer;
 }
 
+#player aside input[type="text"]{
+	width: 100%;
+}
+
 #player aside ul li.active{
-	background: blue;
-	color: white;
+	background-image: -webkit-linear-gradient(bottom, rgb(237,237,237) 0%, #D8DEE4 50%, rgb(237,237,237) 86%);
+	color: #000;
 }
 
 #player section{

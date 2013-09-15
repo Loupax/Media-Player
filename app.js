@@ -13,18 +13,14 @@ app.controller('PlayerController', ['$scope', function($scope, $element){
 
   var playNext = function(e){
     $scope.$root.$broadcast('request_next_file');
-  };
-
- 
+  }; 
 
   video.addEventListener('ended', playNext);
   audio.addEventListener('ended', playNext);
 
-
 	$scope.$on('file_clicked', function(event, fileEntry){
 		var reader = new FileReader(),
         url;
-
     reader = window.URL || window.webKitURL;
 		
     
@@ -56,11 +52,13 @@ app.controller('PlayerController', ['$scope', function($scope, $element){
 
 app.controller('FileListController', ['$scope', function($scope) {
   $scope.tree = [];
+  $scope.listFilter = '';
   $scope.currentFileIndex = -1;
   // Both the file list and the player need to know these settings. If the app
   // becomes more complex, this should be considered to go to it's own service...
   $scope.$root.autoplay = true;
   $scope.$root.repeat   = false;
+  $scope.$root.currentFilename = '';
 
   $scope.$watch('autoplay', function(new_value, old_value){
     // This is NOT a good practice. The file list controller should not touch
@@ -75,14 +73,14 @@ app.controller('FileListController', ['$scope', function($scope) {
 
     if($scope.currentFileIndex < $scope.tree.length - 1)
     {
-      if(!$scope.autoplay){
+      if($scope.autoplay){
         $scope.currentFileIndex++;
         $scope.$root.$broadcast('file_clicked', $scope.tree[$scope.currentFileIndex]);
       }
     }
     else
     {
-      if(!$scope.repeat){
+      if($scope.repeat){
         $scope.currentFileIndex = 0;
         $scope.$root.$broadcast('file_clicked', $scope.tree[$scope.currentFileIndex]);
       }
@@ -152,6 +150,8 @@ chrome.mediaGalleries.getMediaFileSystems({
 /*
  * Natural Sort algorithm for Javascript - Version 0.7 - Released under MIT license
  * Author: Jim Palmer (based on chunking idea from Dave Koelle)
+ *
+ * Changed so it can sort objects by their name attribute
  */
  function naturalSort (a, b) {
     a = a.name, b = b.name;

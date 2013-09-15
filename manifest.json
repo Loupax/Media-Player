@@ -1,6 +1,6 @@
 {
-  "name": "Media player",
-  "description": "Media player",
+  "name": "Web Media player",
+  "description": "Web Media player is a HTML5 based media player that can play both audio and video files",
   "version": "1",
   "manifest_version": 2,
   "app": {
