@@ -13,47 +13,44 @@ app.controller('PlayerController', ['$scope', function($scope, $element){
 	$scope.currentAudio = null;
 	$scope.currentVideo = null;
 
-  var video = document.querySelector('video');
-  var audio = document.querySelector('audio');
+	var video = document.querySelector('video');
+	var audio = document.querySelector('audio');
 
-  // Event listener that requests the next file
-  var playNext = function(e){
-    $scope.$root.$broadcast('request_next_file');
-  }; 
+  	// Event listener that requests the next file
+	var playNext = function(e){
+		$scope.$root.$broadcast('request_next_file');
+	}; 
 
-  // When the media playback is completed, request the next item
-  video.addEventListener('ended', playNext);
-  audio.addEventListener('ended', playNext);
+  	// When the media playback is completed, request the next item
+  	video.addEventListener('ended', playNext);
+  	audio.addEventListener('ended', playNext);
 
-// When the user clicks on a file from the file explorer, read it
+	// When the user clicks on a file from the file explorer, read it
 	$scope.$on('file_clicked', function(event, fileEntry){
 		var reader = new FileReader(),
-        url;
-    reader = window.URL || window.webKitURL;
+        	    url;
+    		reader = window.URL || window.webKitURL;
 		
     
 		fileEntry.file(function(file){
-			//reader.readAsDataURL(file);
-      var extension = file.name.split('.').pop();
-
-      url = URL.createObjectURL(file);
+		
+      			var extension = file.name.split('.').pop();
+      			url = URL.createObjectURL(file);
       
-      if(vidFormats.indexOf(extension) > -1)
-      {
-        $scope.currentVideo = url;  
-        $scope.currentAudio = '';
-      }
-      else if(audFormats.indexOf(extension) > -1)
-      {
-        $scope.currentAudio = url;
-        $scope.currentVideo = '';
-      }
-      
-      delete url;
-      $scope.$apply();
+		      	if(vidFormats.indexOf(extension) > -1)
+		      	{
+			        $scope.currentVideo = url;  
+			        $scope.currentAudio = '';
+			}
+		      	else if(audFormats.indexOf(extension) > -1)
+		      	{
+		        	$scope.currentAudio = url;
+		        	$scope.currentVideo = '';
+		      	}
+		      
+      			delete url;
+      			$scope.$apply();
 		});
-		
-		
 	});
 }]);
 
