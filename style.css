@@ -9,12 +9,12 @@ ul{
 }
   
 #player aside{
-    background: #FAF9F9;
-    flex: 1;
+	background: #FAF9F9;
+	flex: 1;
 }
 #player aside #fileList{
 	overflow-x: hidden; 
-    overflow-y: auto;
+	overflow-y: auto;
 	text-overflow: ellipsis
 
 	background: #FAF9F9;
@@ -23,9 +23,6 @@ ul{
 	height: -webkit-calc(100% - 4em);
 }
 
-#player aside #options{
-	
-}
 
 #player aside ul li{
 	display: block;
@@ -44,8 +41,8 @@ ul{
 
 #player section{
 	display: flex;
-    background: #111;
-    flex: 3;
+	background: #111;
+	flex: 3;
 }
 
 video{
