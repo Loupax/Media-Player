@@ -1,14 +1,7 @@
-var app = angular.module('app', []);
-
-// Supported audio formats
-var audFormats = ['wav', 'mp3', 'ogg'];
-// Supported video formats
-var vidFormats = ['3gp', '3gpp', 'avi', 'flv', 'mov', 'mpeg', 'mpeg4', 'mp4', 'webm', 'wmv'];
-// All the valid formats in a single array to simplify checks in the future
-var validFormats = audFormats.concat(vidFormats);
+var app = angular.module('app', ['chrome.media']);
 
 // The controller if the Player pane. Contains the audio and video player tags
-app.controller('PlayerController', ['$scope', function($scope, $element){
+app.controller('PlayerController', ['$scope','MediaService', '$element', function($scope, MediaService, $element){
 	// Strings that will contain media URLs when files are selected
 	$scope.currentAudio = null;
 	$scope.currentVideo = null;
@@ -37,12 +30,12 @@ app.controller('PlayerController', ['$scope', function($scope, $element){
       			var extension = file.name.split('.').pop();
       			url = URL.createObjectURL(file);
       
-		      	if(vidFormats.indexOf(extension) > -1)
+		      	if(MediaService.videoFormats.indexOf(extension) > -1)
 		      	{
 			        $scope.currentVideo = url;  
 			        $scope.currentAudio = '';
 			}
-		      	else if(audFormats.indexOf(extension) > -1)
+		      	else if(MediaService.audioFormats.indexOf(extension) > -1)
 		      	{
 		        	$scope.currentAudio = url;
 		        	$scope.currentVideo = '';
@@ -55,8 +48,9 @@ app.controller('PlayerController', ['$scope', function($scope, $element){
 }]);
 
 
-app.controller('FileListController', ['$scope', function($scope) {
-  $scope.tree = [];
+app.controller('FileListController', ['$scope','MediaService', function($scope, MediaService) {
+  MediaService.reload();
+  $scope.tree = MediaService.fileList;
   $scope.listFilter = '';
   $scope.currentFileIndex = -1;
   // Both the file list and the player need to know these settings. If the app
@@ -96,60 +90,12 @@ app.controller('FileListController', ['$scope', function($scope) {
 
   $scope.isCurrentlyPlayingFile = function(file){
     return $scope.tree.indexOf(file) === $scope.currentFileIndex;
-  }
+  };
 
   $scope.loadAndPlay = function(file){
     $scope.currentFileIndex = $scope.tree.indexOf(file);   
   	$scope.$root.$broadcast('file_clicked', file); 
   };
-
-  var getFileTree = function(entries){
-    var entry,
-        galleryReader,
-        extension;
-
-
-    for(var i = 0; i < entries.length; i++)
-    {
-      entry = entries[i];
-      extension = entry.name.split('.').pop();
-
-      if(entry.constructor.name === 'FileEntry')
-      {
-        if(validFormats.indexOf(extension) > -1) {
-          $scope.tree.push(entry);
-          
-          $scope.tree.sort(naturalSort);
-          $scope.$apply();
-        }
-      }
-      else if(entry.constructor.name === 'DirectoryEntry')
-      {
-
-        galleryReader = entry.createReader();
-        galleryReader.readEntries(function(entries){
-          getFileTree(entries);
-
-          $scope.tree.sort(naturalSort);
-          $scope.$apply();
-        });
-      }
-    }
-  };
-
-  // if the app was restarted, get the media gallery information
-chrome.mediaGalleries.getMediaFileSystems({
-     interactive : 'if_needed'
-  }, function(galleries){
-  	galleries.forEach(function(item, index, array){
-  		galleryReader = item.root.createReader();
-   		galleryReader.readEntries(function(entries){
-   			var extension;
-        var library = {};
-        getFileTree(entries);        
-   		});      
-  	});
-  });
 }]);
 
 
